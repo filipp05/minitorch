@@ -21,6 +21,7 @@ class Graph:
 
 
 def simple(N: int) -> Graph:
+    """Generate a dataset split by the first coordinate."""
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -30,6 +31,7 @@ def simple(N: int) -> Graph:
 
 
 def diag(N: int) -> Graph:
+    """Generate a dataset split by a diagonal line."""
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -39,6 +41,7 @@ def diag(N: int) -> Graph:
 
 
 def split(N: int) -> Graph:
+    """Generate a dataset with positive points on both sides."""
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -48,6 +51,7 @@ def split(N: int) -> Graph:
 
 
 def xor(N: int) -> Graph:
+    """Generate a XOR dataset."""
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -57,6 +61,7 @@ def xor(N: int) -> Graph:
 
 
 def circle(N: int) -> Graph:
+    """Generate a circular dataset."""
     X = make_pts(N)
     y = []
     for x_1, x_2 in X:
@@ -67,6 +72,7 @@ def circle(N: int) -> Graph:
 
 
 def spiral(N: int) -> Graph:
+    """Generate a two-spiral dataset."""
     def x(t: float) -> float:
         return t * math.cos(t) / 20.0
 

@@ -22,8 +22,13 @@ def central_difference(f: Any, *vals: Any, arg: int = 0, epsilon: float = 1e-6) 
     Returns:
         An approximation of $f'_i(x_0, \ldots, x_{n-1})$
     """
-    # TODO: Implement for Task 1.1.
-    raise NotImplementedError('Need to implement for Task 1.1')
+    vals_copy_l = list(vals)
+    vals_copy_l[arg] += epsilon
+
+    vals_copy_r = list(vals)
+    vals_copy_r[arg] -= epsilon
+
+    return (f(*vals_copy_l) - f(*vals_copy_r)) / (2 * epsilon)
 
 
 variable_count = 1
@@ -61,8 +66,25 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     Returns:
         Non-constant Variables in topological order starting from the right.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    visited = set()
+    res = []
+
+    def visit_node(current_node: Variable) -> None:
+        if current_node.unique_id in visited:
+            return
+
+        if current_node.is_constant():
+            return
+
+        visited.add(current_node.unique_id)
+        for parent_node in current_node.parents:
+            visit_node(parent_node)
+
+        res.append(current_node)
+
+    visit_node(variable)
+    return reversed(res)
+
 
 
 def backpropagate(variable: Variable, deriv: Any) -> None:
@@ -76,8 +98,21 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
 
     No return. Should write to its results to the derivative values of each leaf through `accumulate_derivative`.
     """
-    # TODO: Implement for Task 1.4.
-    raise NotImplementedError('Need to implement for Task 1.4')
+    derivatives = {variable.unique_id: deriv}
+    for current_node in topological_sort(variable):
+        current_gradient = derivatives[current_node.unique_id]
+
+        if current_node.is_leaf():
+            current_node.accumulate_derivative(current_gradient)
+            continue
+        for input_node, input_gradient in current_node.chain_rule(current_gradient):
+            if input_node.is_constant():
+                continue
+            derivatives[input_node.unique_id] = (
+                derivatives.get(input_node.unique_id, 0.0) + input_gradient
+            )
+
+
 
 
 @dataclass

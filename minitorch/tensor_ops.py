@@ -264,8 +264,14 @@ def tensor_map(
         in_shape: Shape,
         in_strides: Strides,
     ) -> None:
-        # TODO: Implement for Task 2.3.
-        raise NotImplementedError('Need to implement for Task 2.3')
+        oi = np.zeros(len(out_shape), dtype=np.int32)
+        ii = np.zeros(len(in_shape), dtype=np.int32)
+        for i in range(len(out)):
+            to_index(i, out_shape, oi)
+            broadcast_index(oi, out_shape, in_shape, ii)
+            out[index_to_position(oi, out_strides)] = fn(
+                in_storage[index_to_position(ii, in_strides)]
+            )
 
     return _map
 
@@ -309,8 +315,17 @@ def tensor_zip(
         b_shape: Shape,
         b_strides: Strides,
     ) -> None:
-        # TODO: Implement for Task 2.3.
-        raise NotImplementedError('Need to implement for Task 2.3')
+        oi = np.zeros(len(out_shape), dtype=np.int32)
+        ai = np.zeros(len(a_shape), dtype=np.int32)
+        bi = np.zeros(len(b_shape), dtype=np.int32)
+        for i in range(len(out)):
+            to_index(i, out_shape, oi)
+            broadcast_index(oi, out_shape, a_shape, ai)
+            broadcast_index(oi, out_shape, b_shape, bi)
+            out[index_to_position(oi, out_strides)] = fn(
+                a_storage[index_to_position(ai, a_strides)],
+                b_storage[index_to_position(bi, b_strides)],
+            )
 
     return _zip
 
@@ -340,8 +355,15 @@ def tensor_reduce(
         a_strides: Strides,
         reduce_dim: int,
     ) -> None:
-        # TODO: Implement for Task 2.3.
-        raise NotImplementedError('Need to implement for Task 2.3')
+        oi = np.zeros(len(out_shape), dtype=np.int32)
+        ai = np.zeros(len(a_shape), dtype=np.int32)
+        for i in range(len(out)):
+            to_index(i, out_shape, oi)
+            ai[:] = oi
+            op = index_to_position(oi, out_strides)
+            for j in range(int(a_shape[reduce_dim])):
+                ai[reduce_dim] = j
+                out[op] = fn(out[op], a_storage[index_to_position(ai, a_strides)])
 
     return _reduce
 
