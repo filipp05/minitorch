@@ -86,7 +86,6 @@ def topological_sort(variable: Variable) -> Iterable[Variable]:
     return reversed(res)
 
 
-
 def backpropagate(variable: Variable, deriv: Any) -> None:
     """
     Runs backpropagation on the computation graph in order to
@@ -111,8 +110,6 @@ def backpropagate(variable: Variable, deriv: Any) -> None:
             derivatives[input_node.unique_id] = (
                 derivatives.get(input_node.unique_id, 0.0) + input_gradient
             )
-
-
 
 
 @dataclass
